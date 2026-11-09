@@ -59,7 +59,16 @@ h2 svg { width:24px; height:24px }
 
 /* one situation */
 .case { background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:24px; margin:0 0 16px; box-shadow:var(--shadow); scroll-margin-top:76px }
-.case h3 { margin:0 0 4px; font-size:19px; letter-spacing:-0.01em }
+.case h3 { margin:0 0 4px; font-size:19px; letter-spacing:-0.01em; display:flex; align-items:flex-start; gap:12px }
+.case h3 .t { flex:1; min-width:0 }
+/* "Copy link": send someone straight to this fix */
+.share { flex:none; display:inline-flex; align-items:center; gap:6px; margin-top:1px; padding:5px 10px; border-radius:7px; border:1px solid var(--line); background:var(--card2); color:var(--muted); font:600 13px var(--fBody); cursor:pointer; white-space:nowrap }
+.share:hover { color:var(--text) }
+.share svg { width:14px; height:14px }
+.share.done { color:var(--good) }
+/* the fix a shared link points to */
+.case:target { border-color:var(--accent); box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent), var(--shadow) }
+.case:target h3 .t::before { content:"You're here"; display:block; font:600 12px/1.6 var(--fMono); color:var(--accent); letter-spacing:.02em }
 .case .when { margin:0 0 16px; color:var(--muted); font-size:15px }
 .case .body { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:24px; align-items:start }
 .case .body.wide { grid-template-columns:minmax(0,1fr) }
@@ -103,6 +112,7 @@ footer .brand img { width:20px; height:20px; border-radius:5px }
       <a href="#mac">Mac</a>
       <a href="#windows">Windows</a>
       <a href="./#download">Download</a>
+      <a href="help.html" aria-current="page" style="color:var(--text)">Help</a>
     </nav>
   </div>
 </header>
@@ -261,6 +271,25 @@ footer .brand img { width:20px; height:20px; border-radius:5px }
 </footer>
 
 <script>
+// "Copy link" on every situation: a link that opens this page at that fix
+// (highlighted). Without clipboard access the link goes into the address bar.
+var LINK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.5-1.5"/></svg>';
+document.querySelectorAll(".case[id]").forEach(function (c) {
+  var h = c.querySelector("h3");
+  h.innerHTML = '<span class="t">' + h.innerHTML + "</span>";
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "share"; b.innerHTML = LINK + "<span>Copy link</span>";
+  b.setAttribute("aria-label", "Copy a link to this fix");
+  b.addEventListener("click", function () {
+    var url = location.origin + location.pathname + "#" + c.id, label = b.querySelector("span");
+    var shown = function (text) { label.textContent = text; b.classList.add("done"); setTimeout(function () { label.textContent = "Copy link"; b.classList.remove("done"); }, 1800); };
+    var fallback = function () { history.replaceState(null, "", "#" + c.id); shown("Link in address bar"); };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(function () { shown("Copied"); }, fallback);
+    else fallback();
+  });
+  h.appendChild(b);
+});
+
 // Copy buttons; if the clipboard isn't available, select the text instead.
 document.querySelectorAll("[data-copy]").forEach(function (b) {
   b.addEventListener("click", function () {
