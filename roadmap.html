@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phospane roadmap</title>
+<meta name="description" content="Where Phospane is going between now and 1.0: what each release brings and roughly when.">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+/* Same colours and type as index.html and help.html (the app's default theme), light and dark. */
+:root {
+  --bg:#111318; --card:#1a1d24; --card2:#22262f; --text:#eceef3; --muted:#9aa1ae;
+  --line:rgba(255,255,255,0.08); --accent:#8b8bff; --accentBtn:#5555ee; --accentFg:#fff;
+  --good:#34d399; --warn:#f5b84b;
+  --fBody:-apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --fMono:ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --r:14px; --rb:9px; --shadow:none;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:#f5f6fa; --card:#ffffff; --card2:#f0f2f7; --text:#15171c; --muted:#5d6471;
+    --line:rgba(20,24,40,0.1); --accent:#4b4be8; --good:#15803d; --warn:#9a6700;
+    --shadow:0 1px 2px rgba(16,24,40,0.05), 0 4px 16px rgba(16,24,40,0.05);
+    color-scheme: light;
+  }
+}
+* { box-sizing:border-box }
+html { scroll-behavior:smooth }
+body { margin:0; overflow-x:hidden; background:var(--bg); color:var(--text); font:16px/1.6 var(--fBody); -webkit-font-smoothing:antialiased }
+a { color:var(--accent); text-decoration:none }
+a:hover { text-decoration:underline }
+:focus-visible { outline:2px solid var(--accent); outline-offset:3px; border-radius:4px }
+.wrap { max-width:860px; margin:0 auto; padding:0 24px }
+.muted { color:var(--muted) }
+b { font-weight:650 }
+
+header { position:sticky; top:0; z-index:5; background:color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--line) }
+header .wrap { display:flex; align-items:center; gap:24px; height:60px; max-width:1080px }
+.brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:700; font-size:18px; letter-spacing:-0.01em }
+.brand:hover { text-decoration:none }
+.brand img { width:28px; height:28px; border-radius:7px }
+nav { margin-left:auto; display:flex; gap:22px; font-size:15px }
+nav a { color:var(--muted) }
+nav a:hover { color:var(--text); text-decoration:none }
+
+h1 { font-size:clamp(32px, 5vw, 46px); line-height:1.08; letter-spacing:-0.03em; margin:56px 0 12px; font-weight:750 }
+.lede { font-size:18px; color:var(--muted); margin:0 0 32px; max-width:38em }
+h2 { font-size:26px; letter-spacing:-0.02em; margin:56px 0 16px; display:flex; align-items:center; gap:10px }
+h2 svg { width:24px; height:24px }
+
+
+/* the timeline: one release per row, a rail with a dot on the left */
+.releases { list-style:none; margin:0; padding:0; position:relative }
+.releases::before { content:""; position:absolute; left:11px; top:18px; bottom:18px; width:2px; background:var(--line) }
+.rel { position:relative; padding-left:44px; margin:0 0 16px }
+.rel::before { content:""; position:absolute; left:4px; top:26px; width:12px; height:12px; border-radius:50%; background:var(--bg); border:2px solid var(--muted) }
+.rel.now::before { background:var(--good); border-color:var(--good); box-shadow:0 0 0 5px color-mix(in srgb, var(--good) 22%, transparent) }
+.rel.next::before { border-color:var(--accent) }
+.rel.stable::before { background:var(--accent); border-color:var(--accent) }
+.card { background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:20px 22px; box-shadow:var(--shadow); scroll-margin-top:76px }
+.rel.stable .card { border-color:color-mix(in srgb, var(--accent) 45%, var(--line)) }
+.top { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin:0 0 4px }
+.ver { font:650 15px/1 var(--fMono); color:var(--accent) }
+.top h2 { margin:0; font-size:21px; letter-spacing:-0.015em; display:block; flex:1; min-width:0 }
+.when { font:500 13px/1 var(--fMono); color:var(--muted); white-space:nowrap }
+.chip { display:inline-block; font:600 11.5px/1 var(--fMono); padding:4px 8px; border-radius:999px; vertical-align:2px; margin-left:8px; letter-spacing:.02em }
+.chip.now { background:color-mix(in srgb, var(--good) 16%, transparent); color:var(--good) }
+.chip.next { background:color-mix(in srgb, var(--accent) 16%, transparent); color:var(--accent) }
+.why { margin:0 0 12px; color:var(--muted); font-size:15px; max-width:44em }
+.card ul { margin:0; padding-left:20px; display:grid; gap:6px }
+.card li::marker { color:var(--accent) }
+.card li b { font-weight:650 }
+.card .later { margin:12px 0 0; font-size:14px; color:var(--muted) }
+.small { font-size:14px; color:var(--muted) }
+.bar { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 36px }
+.bar a { display:inline-flex; align-items:center; gap:8px; padding:7px 12px; border-radius:999px; border:1px solid var(--line); background:var(--card); color:var(--text); font-size:14px }
+.bar a:hover { text-decoration:none; background:var(--card2) }
+.bar a span { font:600 12px/1 var(--fMono); color:var(--accent) }
+.notes { margin-top:48px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px }
+.notes .card h3 { margin:0 0 8px; font-size:17px }
+.notes .card p { margin:0; color:var(--muted); font-size:15px }
+
+footer { border-top:1px solid var(--line); margin-top:72px; padding:28px 0 40px; color:var(--muted); font-size:14px }
+footer .wrap { display:flex; gap:20px; flex-wrap:wrap; align-items:center; max-width:1080px }
+footer .brand { font-size:15px }
+footer .brand img { width:20px; height:20px; border-radius:5px }
+
+
+@media (max-width: 700px) {
+  .notes { grid-template-columns:minmax(0,1fr) }
+}
+@media (max-width: 560px) {
+  .wrap { padding:0 16px }
+  .card { padding:16px 16px }
+  .rel { padding-left:34px }
+  .releases::before { left:7px }
+  .rel::before { left:0 }
+  .top { row-gap:6px }
+  .when { flex-basis:100%; order:3; white-space:normal }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="Phospane home"><img src="icon.png" alt="">Phospane</a>
+    <nav>
+      <a href="./#download">Download</a>
+      <a href="help.html">Help</a>
+      <a href="roadmap.html" aria-current="page" style="color:var(--text)">Roadmap</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Roadmap</h1>
+  <p class="lede">Where Phospane is going between now and 1.0. Each release has one theme. The months are targets, not promises: a release ships when it works, not when the calendar says so.</p>
+
+  <nav class="bar" aria-label="Releases">
+    <a href="#now"><span>0.1</span>Now</a>
+    <a href="#v0-2"><span>0.2</span>Trust</a>
+    <a href="#v0-3"><span>0.3</span>Any network</a>
+    <a href="#v0-4"><span>0.4</span>Everyday work</a>
+    <a href="#v0-5"><span>0.5</span>Play</a>
+    <a href="#v0-6"><span>0.6</span>Everywhere</a>
+    <a href="#betas"><span>0.7–0.9</span>Polish</a>
+    <a href="#v1"><span>1.0</span>Stable</a>
+  </nav>
+
+  <ol class="releases">
+    <li class="rel now">
+      <section class="card" id="now">
+        <div class="top"><span class="ver">0.1</span><h2>Today<span class="chip now">Out now</span></h2><span class="when">small updates every few days</span></div>
+        <p class="why">Stream another computer's screen, sound, keyboard and mouse, Mac ⇄ Windows in both directions, at around 26&nbsp;ms over Tailscale.</p>
+        <ul>
+          <li>Hardware H.264 and HEVC, sharp-text 4:4:4, several monitors and virtual screens.</li>
+          <li>Encrypted pairing with a PIN; built-in Tailscale for when you're away from home.</li>
+          <li>Clipboard with images, files and folders; the other computer's cursor shapes.</li>
+          <li>Phones, tablets and TVs through Moonlight; gamepads on Windows computers.</li>
+          <li>Five themes, light and dark; automatic updates.</li>
+        </ul>
+        <p class="later">Coming in the next small updates: Windows downloads and updates, and fixes for whatever early users run into.</p>
+      </section>
+    </li>
+
+    <li class="rel next">
+      <section class="card" id="v0-2">
+        <div class="top"><span class="ver">0.2</span><h2>Trust &amp; first launch<span class="chip next">Next</span></h2><span class="when">December 2026</span></div>
+        <p class="why">Make installing, updating and getting help painless before adding more.</p>
+        <ul>
+          <li><b>Mac and Windows released together,</b> every time.</li>
+          <li><b>Permissions survive updates on Mac:</b> no more allowing Screen Recording and Accessibility again after each update.</li>
+          <li><b>A first-run checklist:</b> name the computer and allow each permission, with live ticks and buttons that open the right settings.</li>
+          <li><b>Help inside the app</b>, and messages that link to the fix.</li>
+          <li><b>“Report a problem”:</b> collects logs into one file you can send. Crash reports only if you opt in.</li>
+          <li><b>A beta channel</b> for trying new things early.</li>
+        </ul>
+      </section>
+    </li>
+
+    <li class="rel">
+      <section class="card" id="v0-3">
+        <div class="top"><span class="ver">0.3</span><h2>Any network</h2><span class="when">January 2027</span></div>
+        <p class="why">On good networks it's already fast. This release is about hotel Wi-Fi, phone hotspots and long distances.</p>
+        <ul>
+          <li><b>Adaptive quality:</b> the stream eases off when the network struggles instead of freezing.</li>
+          <li><b>Loss recovery</b> so dropped packets don't turn into stutters.</li>
+          <li><b>A connection quality light</b> that says why: Wi-Fi interference, a relayed path, or a busy computer.</li>
+          <li><b>Keeps going</b> when you switch networks or wake from sleep.</li>
+        </ul>
+      </section>
+    </li>
+
+    <li class="rel">
+      <section class="card" id="v0-4">
+        <div class="top"><span class="ver">0.4</span><h2>Everyday remote work</h2><span class="when">February 2027</span></div>
+        <p class="why">Things people do every day with a computer that isn't in front of them.</p>
+        <ul>
+          <li><b>Several viewers at once;</b> one controls, the others watch.</li>
+          <li><b>Guest access:</b> show your screen with a one-time PIN, view-only, gone after the session.</li>
+          <li><b>Drag files</b> onto the stream window to put them on the other computer.</li>
+          <li><b>Wake a sleeping computer</b> from its card.</li>
+          <li><b>Your microphone on the other computer</b> (Windows first).</li>
+          <li><b>Windows lock screen and admin prompts</b> you can answer remotely.</li>
+          <li><b>Session history:</b> who connected and when, kept on your computer.</li>
+        </ul>
+      </section>
+    </li>
+
+    <li class="rel">
+      <section class="card" id="v0-5">
+        <div class="top"><span class="ver">0.5</span><h2>Play</h2><span class="when">March 2027</span></div>
+        <ul>
+          <li><b>HDR</b> on displays that can show it.</li>
+          <li><b>120 Hz and above</b> where both sides support it.</li>
+          <li><b>AV1</b> on hardware that has it: better picture at the same bandwidth.</li>
+          <li><b>Game mode</b> in one switch: game keyboard, lowest delay, frame rate first.</li>
+          <li><b>Gamepads with a Mac as the shared computer,</b> mapped to keyboard and mouse.</li>
+        </ul>
+      </section>
+    </li>
+
+    <li class="rel">
+      <section class="card" id="v0-6">
+        <div class="top"><span class="ver">0.6</span><h2>Everywhere</h2><span class="when">April 2027</span></div>
+        <ul>
+          <li><b>Linux</b> as a viewer first; sharing a Linux computer later.</li>
+          <li><b>Intel Macs and Windows on Arm.</b></li>
+          <li><b>A browser viewer</b> to try: connect from Chrome, Edge or Safari without installing anything.</li>
+          <li><b>Phones and tablets</b> stay on Moonlight, kept working well.</li>
+        </ul>
+      </section>
+    </li>
+
+    <li class="rel">
+      <section class="card" id="betas">
+        <div class="top"><span class="ver">0.7–0.9</span><h2>Harden &amp; polish</h2><span class="when">May–June 2027, betas</span></div>
+        <p class="why">No new features: fixes and the work that makes 1.0 deserve the number.</p>
+        <ul>
+          <li><b>A security review</b> of pairing and encryption, and automated testing of everything that reads network data.</li>
+          <li><b>Translations:</b> Ukrainian, German and Spanish first.</li>
+          <li><b>Accessibility:</b> every screen works by keyboard and screen reader, in every theme.</li>
+          <li><b>Speed checks</b> on every build, so it never quietly gets slower.</li>
+          <li><b>Better docs:</b> FAQ, troubleshooting by symptom, and a privacy page.</li>
+        </ul>
+      </section>
+    </li>
+
+    <li class="rel stable">
+      <section class="card" id="v1">
+        <div class="top"><span class="ver">1.0</span><h2>Stable</h2><span class="when">summer 2027</span></div>
+        <p class="why">1.0 ships when all of this is true, not on a date:</p>
+        <ul>
+          <li>Updates install by themselves across releases on Mac and Windows, and Mac permissions survive them.</li>
+          <li>At least 99.5&nbsp;% of sessions end without a crash (from people who opted in to reports).</li>
+          <li>30&nbsp;ms or less at 1080p and 60&nbsp;fps on a home network or a direct Tailscale connection, and graceful on bad networks.</li>
+          <li>Old and new versions keep talking to each other: no forced updates across 1.x.</li>
+          <li>The security review is done and everything it found is fixed.</li>
+          <li>Every warning you can see has a help page, and a new computer gets from download to sharing on its own.</li>
+        </ul>
+      </section>
+    </li>
+  </ol>
+
+  <div class="notes">
+    <section class="card">
+      <h3>Free, no account</h3>
+      <p>Phospane isn't signed with paid Apple or Microsoft certificates, so the first launch shows a warning once. <a href="help.html">First launch help</a> walks you through it.</p>
+    </section>
+    <section class="card">
+      <h3>Want something sooner?</h3>
+      <p>The order follows what hurts people most today. If something here matters to you, or something is missing, <a href="https://github.com/aks1n3d/phospane-app/issues">open an issue on GitHub</a>.</p>
+    </section>
+  </div>
+  <p class="small" style="margin-top:28px">Last updated 9 November 2026.</p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="./"><img src="icon.png" alt="">Phospane</a>
+    <span>Made by Aks1n3d</span>
+    <a href="./#download">Download</a>
+    <a href="help.html">First launch help</a>
+    <a href="https://github.com/aks1n3d/phospane-app/releases">Releases</a>
+  </div>
+</footer>
+</body>
+</html>
