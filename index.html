@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>beam: your other computer, right here</title>
-<meta name="description" content="beam streams your Mac or Windows PC to your other computers and phones, with sound, keyboard and gamepads. Low latency, encrypted, free.">
-<meta property="og:title" content="beam">
+<title>Phospane: your other computer, right here</title>
+<meta name="description" content="Phospane streams your Mac or Windows PC to your other computers and phones, with sound, keyboard and gamepads. Low latency, encrypted, free.">
+<meta property="og:title" content="Phospane">
 <meta property="og:description" content="Your other computer, right here. Low-latency remote desktop for Mac and Windows.">
 <meta property="og:image" content="icon.png">
 <link rel="icon" href="favicon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <style>
-/* Colours: the app's "beam" theme (app/src/theme.css), light and dark. */
+/* Colours: the app's default theme (app/src/theme.css), light and dark. */
 :root {
   --bg:#111318; --card:#1a1d24; --card2:#22262f; --text:#eceef3; --muted:#9aa1ae;
   --line:rgba(255,255,255,0.08); --accent:#8b8bff; --accentBtn:#5555ee; --accentFg:#fff;
@@ -65,7 +65,7 @@ h1 .glow { background:linear-gradient(90deg, var(--beamA), var(--beamB)); -webki
 .cta { display:flex; flex-wrap:wrap; gap:12px; align-items:center }
 .fine { margin-top:16px; font-size:14px; color:var(--muted) }
 
-/* the illustration: two screens, a beam between them */
+/* the illustration: two screens, a beam of light between them */
 .scene { position:relative; aspect-ratio:5/4 }
 .screen { position:absolute; border-radius:12px; background:var(--card); border:1px solid var(--line); box-shadow:0 24px 60px -24px rgba(0,0,0,.5); overflow:hidden }
 .screen .bar { height:22px; background:var(--card2); border-bottom:1px solid var(--line); display:flex; gap:6px; align-items:center; padding:0 9px }
@@ -159,7 +159,7 @@ footer .brand img { width:20px; height:20px; border-radius:5px }
 <body>
 <header>
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="beam home"><img src="icon.png" alt="">beam</a>
+    <a class="brand" href="#top" aria-label="Phospane home"><img src="icon.png" alt="">Phospane</a>
     <nav>
       <a class="opt" href="#features">Features</a>
       <a class="opt" href="#phones">Phones</a>
@@ -173,12 +173,12 @@ footer .brand img { width:20px; height:20px; border-radius:5px }
     <div class="hero">
       <div>
         <h1>Your other computer, <span class="glow">right here.</span></h1>
-        <p class="lede">beam streams your Mac or Windows PC to your other computers, phones and TV, with sound, keyboard, mouse and gamepads. Fast enough to work and play on, private by design, and free.</p>
+        <p class="lede">Phospane streams your Mac or Windows PC to your other computers, phones and TV, with sound, keyboard, mouse and gamepads. Fast enough to work and play on, private by design, and free.</p>
         <div class="cta">
           <a class="btn primary" data-os="mac" href="#download"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.6s-2.5-1-2.5-3.7zM14.1 5.6c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.5 2.7-1.3z"/></svg>Download for Mac</a>
           <a class="btn" data-os="win" href="#download"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.5v7H3zM12.5 4.2 21 3v8.5h-8.5zM3 12.5h7.5v7L3 18.5zM12.5 12.5H21V21l-8.5-1.2z"/></svg>Download for Windows</a>
         </div>
-        <p class="fine">macOS on Apple Silicon · Windows 10/11 (64-bit) · No beam account needed</p>
+        <p class="fine">macOS on Apple Silicon · Windows 10/11 (64-bit) · No account needed</p>
       </div>
       <div class="scene" aria-hidden="true">
         <div class="screen a"><div class="bar"><i></i><i></i><i></i></div><div class="desk"><div class="win"></div></div></div>
@@ -218,7 +218,7 @@ footer .brand img { width:20px; height:20px; border-radius:5px }
         <div class="card">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
           <h3>Private by design</h3>
-          <p>Computers pair once with a PIN. Every packet is encrypted end to end, and the stream goes straight between your devices, not through a beam server.</p>
+          <p>Computers pair once with a PIN. Every packet is encrypted end to end, and the stream goes straight between your devices, not through a Phospane server.</p>
         </div>
         <div class="card">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
@@ -238,8 +238,8 @@ footer .brand img { width:20px; height:20px; border-radius:5px }
       <h2>Set up in a minute</h2>
       <p class="sub">No accounts, no port forwarding. Your computers find each other on the same network.</p>
       <div class="steps">
-        <div class="card"><h3>Install beam on both computers</h3><p>The one you want to use, and the one you'll use it from.</p></div>
-        <div class="card"><h3>Turn on sharing</h3><p>On the computer you want to reach. beam waits in the menu bar or tray, and can start when you log in.</p></div>
+        <div class="card"><h3>Install Phospane on both computers</h3><p>The one you want to use, and the one you'll use it from.</p></div>
+        <div class="card"><h3>Turn on sharing</h3><p>On the computer you want to reach. Phospane waits in the menu bar or tray, and can start when you log in.</p></div>
         <div class="card"><h3>Connect and pair</h3><p>Pick the computer and type the PIN it shows. Only needed the first time.</p>
           <div class="pin" aria-hidden="true"><span>4</span><span>7</span><span>1</span><span>9</span></div></div>
       </div>
@@ -247,7 +247,7 @@ footer .brand img { width:20px; height:20px; border-radius:5px }
 
     <section id="phones">
       <h2>Phones, tablets and TV too</h2>
-      <p class="sub">A computer that shares with beam also speaks Moonlight's protocol, so the free Moonlight app works on devices beam doesn't run on.</p>
+      <p class="sub">A computer that shares with Phospane also speaks Moonlight's protocol, so the free Moonlight app works on devices Phospane doesn't run on.</p>
       <div class="split">
         <div class="card">
           <ul class="list">
@@ -259,46 +259,46 @@ footer .brand img { width:20px; height:20px; border-radius:5px }
         </div>
         <div class="card">
           <h3 style="margin-top:0">How</h3>
-          <p>Open Moonlight on the same network and the computer shows up by itself. Tap it and type the PIN Moonlight shows into beam.</p>
-          <p style="margin-top:12px">Away from home: install the Tailscale app on the phone, sign in to the same account as beam's built-in Tailscale, and add the computer in Moonlight by its <span class="mono">beam-…</span> address.</p>
+          <p>Open Moonlight on the same network and the computer shows up by itself. Tap it and type the PIN Moonlight shows into Phospane.</p>
+          <p style="margin-top:12px">Away from home: install the Tailscale app on the phone, sign in to the same account as Phospane's built-in Tailscale, and add the computer in Moonlight by its <span class="mono">phospane-…</span> address.</p>
         </div>
       </div>
     </section>
 
     <section id="download">
-      <h2>Download beam</h2>
-      <p class="sub">Free. Once it's installed, beam keeps itself up to date.</p>
+      <h2>Download Phospane</h2>
+      <p class="sub">Free. Once it's installed, Phospane keeps itself up to date.</p>
       <div class="dl">
         <div class="card">
           <h3><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.6s-2.5-1-2.5-3.7zM14.1 5.6c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.5 2.7-1.3z"/></svg>macOS</h3>
           <span class="muted">Apple Silicon (M1 and later)</span>
-          <a class="btn primary dlink" data-file="phospane-macos.dmg" href="https://github.com/aks1n3d/beam-app/releases/latest/download/phospane-macos.dmg">Download .dmg</a>
+          <a class="btn primary dlink" data-file="phospane-macos.dmg" href="https://github.com/aks1n3d/phospane-app/releases/latest/download/phospane-macos.dmg">Download .dmg</a>
           <ol>
-            <li>Open the .dmg and drag beam to Applications.</li>
+            <li>Open the .dmg and drag Phospane to Applications.</li>
             <li>The first time, macOS may say it can't check the app: open System Settings › Privacy &amp; Security and click <b>Open Anyway</b>.</li>
-            <li>To share this Mac, allow Screen Recording and Accessibility when beam asks.</li>
+            <li>To share this Mac, allow Screen Recording and Accessibility when Phospane asks.</li>
           </ol>
         </div>
         <div class="card">
           <h3><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.5v7H3zM12.5 4.2 21 3v8.5h-8.5zM3 12.5h7.5v7L3 18.5zM12.5 12.5H21V21l-8.5-1.2z"/></svg>Windows</h3>
           <span class="muted">Windows 10 and 11, 64-bit</span>
-          <a class="btn primary dlink" data-file="phospane-windows-setup.exe" href="https://github.com/aks1n3d/beam-app/releases/latest/download/phospane-windows-setup.exe">Download installer</a>
+          <a class="btn primary dlink" data-file="phospane-windows-setup.exe" href="https://github.com/aks1n3d/phospane-app/releases/latest/download/phospane-windows-setup.exe">Download installer</a>
           <ol>
             <li>Run the installer (it asks for admin once, to set up the firewall rules).</li>
             <li>If SmartScreen appears, click <b>More info</b> › <b>Run anyway</b>.</li>
           </ol>
         </div>
       </div>
-      <p class="ver" id="ver">All versions and release notes: <a href="https://github.com/aks1n3d/beam-app/releases">GitHub Releases</a></p>
+      <p class="ver" id="ver">All versions and release notes: <a href="https://github.com/aks1n3d/phospane-app/releases">GitHub Releases</a></p>
     </section>
   </div>
 </main>
 
 <footer>
   <div class="wrap">
-    <a class="brand" href="#top"><img src="icon.png" alt="">beam</a>
+    <a class="brand" href="#top"><img src="icon.png" alt="">Phospane</a>
     <span>Made by Aks1n3d</span>
-    <a href="https://github.com/aks1n3d/beam-app/releases">Releases</a>
+    <a href="https://github.com/aks1n3d/phospane-app/releases">Releases</a>
   </div>
 </footer>
 
@@ -311,7 +311,7 @@ footer .brand img { width:20px; height:20px; border-radius:5px }
     m.classList.remove("primary"); w.classList.add("primary"); w.parentNode.insertBefore(w, m);
   }
   // The hero buttons download directly once a release exists; until then they scroll to #download.
-  fetch("https://api.github.com/repos/aks1n3d/beam-app/releases/latest")
+  fetch("https://api.github.com/repos/aks1n3d/phospane-app/releases/latest")
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (rel) {
       var ver = document.getElementById("ver");
@@ -324,7 +324,7 @@ footer .brand img { width:20px; height:20px; border-radius:5px }
       document.querySelectorAll(".dlink").forEach(function (a) {
         if (names.indexOf(a.dataset.file) < 0) { a.setAttribute("aria-disabled", "true"); a.textContent = "Coming soon"; }
       });
-      var base = "https://github.com/aks1n3d/beam-app/releases/latest/download/";
+      var base = "https://github.com/aks1n3d/phospane-app/releases/latest/download/";
       document.querySelector('[data-os="mac"]').href = names.indexOf("phospane-macos.dmg") >= 0 ? base + "phospane-macos.dmg" : "#download";
       document.querySelector('[data-os="win"]').href = names.indexOf("phospane-windows-setup.exe") >= 0 ? base + "phospane-windows-setup.exe" : "#download";
       ver.insertAdjacentHTML("afterbegin", "Latest: <span class=\"mono\">" + String(rel.tag_name).replace(/[<>&"]/g, "") + "</span> · ");
