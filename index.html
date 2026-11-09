@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>beam: your other computer, right here</title>
+<meta name="description" content="beam streams your Mac or Windows PC to your other computers and phones, with sound, keyboard and gamepads. Low latency, encrypted, free.">
+<meta property="og:title" content="beam">
+<meta property="og:description" content="Your other computer, right here. Low-latency remote desktop for Mac and Windows.">
+<meta property="og:image" content="icon.png">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+/* Colours: the app's "beam" theme (app/src/theme.css), light and dark. */
+:root {
+  --bg:#111318; --card:#1a1d24; --card2:#22262f; --text:#eceef3; --muted:#9aa1ae;
+  --line:rgba(255,255,255,0.08); --accent:#8b8bff; --accentBtn:#5555ee; --accentFg:#fff;
+  --good:#34d399; --beamA:#5b5bff; --beamB:#22d3ee;
+  --fBody:-apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --fMono:ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --r:14px; --rb:9px; --shadow:none;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:#f5f6fa; --card:#ffffff; --card2:#f0f2f7; --text:#15171c; --muted:#5d6471;
+    --line:rgba(20,24,40,0.1); --accent:#4b4be8; --good:#15803d;
+    --shadow:0 1px 2px rgba(16,24,40,0.05), 0 4px 16px rgba(16,24,40,0.05);
+    color-scheme: light;
+  }
+}
+* { box-sizing: border-box }
+html { scroll-behavior: smooth }
+body { margin:0; overflow-x:hidden; background:var(--bg); color:var(--text); font:16px/1.55 var(--fBody); -webkit-font-smoothing:antialiased }
+a { color:var(--accent); text-decoration:none }
+a:hover { text-decoration:underline }
+:focus-visible { outline:2px solid var(--accent); outline-offset:3px; border-radius:4px }
+.wrap { max-width:1080px; margin:0 auto; padding:0 24px }
+.mono { font-family:var(--fMono); font-size:.92em }
+.muted { color:var(--muted) }
+
+/* header */
+header { position:sticky; top:0; z-index:5; background:color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--line) }
+header .wrap { display:flex; align-items:center; gap:24px; height:60px }
+.brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:700; font-size:18px; letter-spacing:-0.01em }
+.brand:hover { text-decoration:none }
+.brand img { width:28px; height:28px; border-radius:7px }
+nav { margin-left:auto; display:flex; gap:22px; font-size:15px }
+nav a { color:var(--muted) }
+nav a:hover { color:var(--text); text-decoration:none }
+
+/* buttons */
+.btn { display:inline-flex; align-items:center; gap:10px; padding:12px 20px; border-radius:var(--rb); border:1px solid var(--line); background:var(--card); color:var(--text); font-weight:600; font-size:15px; cursor:pointer; box-shadow:var(--shadow) }
+.btn:hover { text-decoration:none; background:var(--card2) }
+.btn.primary { background:var(--accentBtn); border-color:transparent; color:var(--accentFg) }
+.btn.primary:hover { background:color-mix(in srgb, var(--accentBtn) 88%, white) }
+.btn svg { width:18px; height:18px; flex:none }
+.btn[aria-disabled="true"] { opacity:.5; pointer-events:none }
+
+/* hero */
+.hero { padding:88px 0 56px; display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:56px; align-items:center }
+h1 { font-size:clamp(40px, 6vw, 64px); line-height:1.02; letter-spacing:-0.035em; margin:0 0 20px; font-weight:750 }
+h1 .glow { background:linear-gradient(90deg, var(--beamA), var(--beamB)); -webkit-background-clip:text; background-clip:text; color:transparent }
+.lede { font-size:19px; color:var(--muted); max-width:34em; margin:0 0 32px }
+.cta { display:flex; flex-wrap:wrap; gap:12px; align-items:center }
+.fine { margin-top:16px; font-size:14px; color:var(--muted) }
+
+/* the illustration: two screens, a beam between them */
+.scene { position:relative; aspect-ratio:5/4 }
+.screen { position:absolute; border-radius:12px; background:var(--card); border:1px solid var(--line); box-shadow:0 24px 60px -24px rgba(0,0,0,.5); overflow:hidden }
+.screen .bar { height:22px; background:var(--card2); border-bottom:1px solid var(--line); display:flex; gap:6px; align-items:center; padding:0 9px }
+.screen .bar i { width:8px; height:8px; border-radius:50%; background:var(--line) }
+.screen.a { left:0; top:6%; width:58%; aspect-ratio:16/10 }
+.screen.b { right:0; bottom:4%; width:66%; aspect-ratio:16/10 }
+.screen .desk { position:absolute; inset:22px 0 0; background:
+  radial-gradient(120% 90% at 20% 10%, color-mix(in srgb, var(--beamA) 55%, transparent), transparent 60%),
+  radial-gradient(90% 90% at 90% 100%, color-mix(in srgb, var(--beamB) 45%, transparent), transparent 60%), var(--card2) }
+.screen .win { position:absolute; left:14%; top:30%; width:52%; height:46%; border-radius:6px; background:var(--card); border:1px solid var(--line) }
+.screen .win::before, .screen .win::after { content:""; position:absolute; left:10%; height:7%; border-radius:3px; background:var(--line) }
+.screen .win::before { top:22%; width:60% } .screen .win::after { top:38%; width:40% }
+.screen.b .inner { position:absolute; inset:30px 8px 8px; border-radius:6px; overflow:hidden; box-shadow:0 0 0 1px var(--line) }
+.ray { position:absolute; left:34%; top:34%; width:48%; height:34%; background:linear-gradient(100deg, color-mix(in srgb, var(--beamA) 70%, transparent), color-mix(in srgb, var(--beamB) 30%, transparent)); clip-path:polygon(0 42%, 100% 0, 100% 100%, 0 58%); filter:blur(.5px); opacity:.85; mix-blend-mode:screen }
+@media (prefers-color-scheme: light) { .ray { mix-blend-mode:multiply; opacity:.55 } }
+.dot { position:absolute; left:31%; top:46.5%; width:22px; height:22px; border-radius:50%; background:#fff; box-shadow:0 0 0 6px color-mix(in srgb, var(--beamA) 35%, transparent), 0 0 30px var(--beamB) }
+.stat { position:absolute; right:4%; top:2%; font:12px/1 var(--fMono); background:var(--card); border:1px solid var(--line); padding:8px 10px; border-radius:8px; color:var(--muted); box-shadow:var(--shadow) }
+.stat b { color:var(--good); font-weight:600 }
+
+/* facts strip */
+.facts { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); border:1px solid var(--line); border-radius:var(--r); background:var(--card); box-shadow:var(--shadow); margin-bottom:96px }
+.facts div { padding:20px 22px; border-left:1px solid var(--line) }
+.facts div:first-child { border-left:0 }
+.facts b { display:block; font:600 22px/1.2 var(--fMono); letter-spacing:-0.02em }
+.facts span { font-size:14px; color:var(--muted) }
+
+section { padding:0 0 96px }
+h2 { font-size:clamp(28px, 4vw, 38px); letter-spacing:-0.025em; line-height:1.1; margin:0 0 12px; font-weight:720 }
+.sub { color:var(--muted); font-size:18px; margin:0 0 40px; max-width:40em }
+
+/* features */
+.grid { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:16px }
+.card { background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:24px; box-shadow:var(--shadow) }
+.card h3 { margin:14px 0 6px; font-size:17px; letter-spacing:-0.01em }
+.card p { margin:0; color:var(--muted); font-size:15px }
+.ic { width:38px; height:38px; border-radius:10px; display:grid; place-items:center; background:color-mix(in srgb, var(--accent) 14%, transparent); color:var(--accent) }
+.ic svg { width:20px; height:20px }
+.also { margin-top:20px; color:var(--muted); font-size:15px }
+
+/* steps */
+.steps { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:16px; counter-reset:s }
+.steps .card::before { counter-increment:s; content:counter(s); font:600 13px/1 var(--fMono); color:var(--accent); border:1px solid color-mix(in srgb, var(--accent) 40%, transparent); border-radius:999px; width:28px; height:28px; display:grid; place-items:center }
+.pin { display:flex; gap:8px; margin-top:16px }
+.pin span { width:40px; height:48px; border-radius:8px; background:var(--card2); border:1px solid var(--line); display:grid; place-items:center; font:600 22px var(--fMono) }
+
+/* phones */
+.split { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px; align-items:stretch }
+.list { margin:0; padding:0; list-style:none }
+.list li { padding:12px 0; border-top:1px solid var(--line); display:flex; gap:12px }
+.list li:first-child { border-top:0; padding-top:0 }
+.list b { min-width:7.5em }
+
+/* download */
+.dl { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px }
+.dl .card { display:flex; flex-direction:column; gap:14px }
+.dl h3 { margin:0; display:flex; align-items:center; gap:10px; font-size:20px }
+.dl h3 svg { width:22px; height:22px }
+.dl ol { margin:0; padding-left:20px; color:var(--muted); font-size:15px }
+.dl ol li { margin:4px 0 }
+.dl .btn { align-self:flex-start }
+.ver { font-size:14px; color:var(--muted); margin-top:20px }
+
+footer { border-top:1px solid var(--line); padding:28px 0 40px; color:var(--muted); font-size:14px }
+footer .wrap { display:flex; gap:20px; flex-wrap:wrap; align-items:center }
+footer .brand { font-size:15px }
+footer .brand img { width:20px; height:20px; border-radius:5px }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns:minmax(0,1fr); padding-top:56px; gap:40px }
+  .grid, .steps { grid-template-columns:repeat(2, minmax(0,1fr)) }
+  .split, .dl { grid-template-columns:minmax(0,1fr) }
+  .facts { grid-template-columns:repeat(2, minmax(0,1fr)) }
+  .facts div:nth-child(3) { border-left:0 }
+  .facts div:nth-child(n+3) { border-top:1px solid var(--line) }
+}
+@media (max-width: 560px) {
+  .wrap { padding:0 16px }
+  nav { gap:16px; font-size:14px }
+  nav .opt { display:none }
+  .grid, .steps { grid-template-columns:minmax(0,1fr) }
+  .facts b { font-size:18px }
+  .list b { min-width:6.5em }
+  .cta .btn { width:100%; justify-content:center }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dot { animation:pulse 3.2s ease-in-out infinite }
+  @keyframes pulse { 50% { box-shadow:0 0 0 10px color-mix(in srgb, var(--beamA) 18%, transparent), 0 0 44px var(--beamB) } }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="beam home"><img src="icon.png" alt="">beam</a>
+    <nav>
+      <a class="opt" href="#features">Features</a>
+      <a class="opt" href="#phones">Phones</a>
+      <a href="#download">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Your other computer, <span class="glow">right here.</span></h1>
+        <p class="lede">beam streams your Mac or Windows PC to your other computers, phones and TV, with sound, keyboard, mouse and gamepads. Fast enough to work and play on, private by design, and free.</p>
+        <div class="cta">
+          <a class="btn primary" data-os="mac" href="#download"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.6s-2.5-1-2.5-3.7zM14.1 5.6c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.5 2.7-1.3z"/></svg>Download for Mac</a>
+          <a class="btn" data-os="win" href="#download"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.5v7H3zM12.5 4.2 21 3v8.5h-8.5zM3 12.5h7.5v7L3 18.5zM12.5 12.5H21V21l-8.5-1.2z"/></svg>Download for Windows</a>
+        </div>
+        <p class="fine">macOS on Apple Silicon · Windows 10/11 (64-bit) · No beam account needed</p>
+      </div>
+      <div class="scene" aria-hidden="true">
+        <div class="screen a"><div class="bar"><i></i><i></i><i></i></div><div class="desk"><div class="win"></div></div></div>
+        <div class="screen b"><div class="bar"><i></i><i></i><i></i></div><div class="inner"><div class="desk" style="inset:0"><div class="win"></div></div></div></div>
+        <div class="ray"></div>
+        <div class="dot"></div>
+        <div class="stat"><b>●</b> 26 ms · 1440p60 · HEVC</div>
+      </div>
+    </div>
+
+    <div class="facts">
+      <div><b>~26 ms</b><span>screen to screen, measured over Tailscale</span></div>
+      <div><b>HEVC 4:4:4</b><span>hardware encoding, sharp text</span></div>
+      <div><b>Every packet</b><span>encrypted with ChaCha20-Poly1305</span></div>
+      <div><b>Mac ⇄ Windows</b><span>either one shares, either one watches</span></div>
+    </div>
+
+    <section id="features">
+      <h2>Everything a remote desktop should do</h2>
+      <p class="sub">Built for using a computer in the other room, or across the city, as if you were sitting in front of it.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div>
+          <h3>Fast</h3>
+          <p>Hardware H.264 and HEVC on both ends and a protocol tuned for latency: around 26 ms from the host's screen to yours.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg></div>
+          <h3>Mac ⇄ Windows keyboard</h3>
+          <p>⌘ and Ctrl swap so shortcuts feel native on either side. Game mode passes every key through unchanged.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></svg></div>
+          <h3>Sound that keeps up</h3>
+          <p>System audio with a 20 ms buffer. It follows your default output device, downmixes surround and covers lost packets.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <h3>Private by design</h3>
+          <p>Computers pair once with a PIN. Every packet is encrypted end to end, and the stream goes straight between your devices, not through a beam server.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+          <h3>From anywhere</h3>
+          <p>Built-in Tailscale: sign in once and reach your computers from any network, with no separate VPN app and no ports to open.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 11h4M8 9v4M15 12h.01M18 10h.01"/><path d="M17.3 5H6.7a4 4 0 0 0-4 3.6l-.7 6.1A3 3 0 0 0 5 18c1 0 1.5-.5 2-1l1.4-1.4a2 2 0 0 1 1.4-.6h4.4a2 2 0 0 1 1.4.6L17 17c.5.5 1 1 2 1a3 3 0 0 0 3-3.3l-.7-6.1a4 4 0 0 0-4-3.6z"/></svg></div>
+          <h3>Gamepads</h3>
+          <p>Controllers on the computer you're watching from work on the shared one (Windows hosts).</p>
+        </div>
+      </div>
+      <p class="also">Also: multiple monitors, virtual screens at the size of your window, clipboard sync, the host's own cursor, and a stats overlay when you want the numbers.</p>
+    </section>
+
+    <section id="how">
+      <h2>Set up in a minute</h2>
+      <p class="sub">No accounts, no port forwarding. Your computers find each other on the same network.</p>
+      <div class="steps">
+        <div class="card"><h3>Install beam on both computers</h3><p>The one you want to use, and the one you'll use it from.</p></div>
+        <div class="card"><h3>Turn on sharing</h3><p>On the computer you want to reach. beam waits in the menu bar or tray, and can start when you log in.</p></div>
+        <div class="card"><h3>Connect and pair</h3><p>Pick the computer and type the PIN it shows. Only needed the first time.</p>
+          <div class="pin" aria-hidden="true"><span>4</span><span>7</span><span>1</span><span>9</span></div></div>
+      </div>
+    </section>
+
+    <section id="phones">
+      <h2>Phones, tablets and TV too</h2>
+      <p class="sub">A computer that shares with beam also speaks Moonlight's protocol, so the free Moonlight app works on devices beam doesn't run on.</p>
+      <div class="split">
+        <div class="card">
+          <ul class="list">
+            <li><b>iPhone, iPad</b><span class="muted">Moonlight from the App Store</span></li>
+            <li><b>Android</b><span class="muted">Moonlight from Google Play</span></li>
+            <li><b>Apple TV</b><span class="muted">Moonlight from the App Store</span></li>
+            <li><b>Android TV</b><span class="muted">Moonlight from Google Play</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">How</h3>
+          <p>Open Moonlight on the same network and the computer shows up by itself. Tap it and type the PIN Moonlight shows into beam.</p>
+          <p style="margin-top:12px">Away from home: install the Tailscale app on the phone, sign in to the same account as beam's built-in Tailscale, and add the computer in Moonlight by its <span class="mono">beam-…</span> address.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="download">
+      <h2>Download beam</h2>
+      <p class="sub">Free. Once it's installed, beam keeps itself up to date.</p>
+      <div class="dl">
+        <div class="card">
+          <h3><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.6s-2.5-1-2.5-3.7zM14.1 5.6c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.5 2.7-1.3z"/></svg>macOS</h3>
+          <span class="muted">Apple Silicon (M1 and later)</span>
+          <a class="btn primary dlink" data-file="beam-macos.dmg" href="https://github.com/aks1n3d/beam-app/releases/latest/download/beam-macos.dmg">Download .dmg</a>
+          <ol>
+            <li>Open the .dmg and drag beam to Applications.</li>
+            <li>The first time, macOS may say it can't check the app: open System Settings › Privacy &amp; Security and click <b>Open Anyway</b>.</li>
+            <li>To share this Mac, allow Screen Recording and Accessibility when beam asks.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.5v7H3zM12.5 4.2 21 3v8.5h-8.5zM3 12.5h7.5v7L3 18.5zM12.5 12.5H21V21l-8.5-1.2z"/></svg>Windows</h3>
+          <span class="muted">Windows 10 and 11, 64-bit</span>
+          <a class="btn primary dlink" data-file="beam-windows-setup.exe" href="https://github.com/aks1n3d/beam-app/releases/latest/download/beam-windows-setup.exe">Download installer</a>
+          <ol>
+            <li>Run the installer (it asks for admin once, to set up the firewall rules).</li>
+            <li>If SmartScreen appears, click <b>More info</b> › <b>Run anyway</b>.</li>
+          </ol>
+        </div>
+      </div>
+      <p class="ver" id="ver">All versions and release notes: <a href="https://github.com/aks1n3d/beam-app/releases">GitHub Releases</a></p>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="icon.png" alt="">beam</a>
+    <span>Made by Aks1n3d</span>
+    <a href="https://github.com/aks1n3d/beam-app/releases">Releases</a>
+  </div>
+</footer>
+
+<script>
+// Put the visitor's platform first.
+(function () {
+  var win = /Windows/i.test(navigator.userAgent);
+  if (win) {
+    var m = document.querySelector('[data-os="mac"]'), w = document.querySelector('[data-os="win"]');
+    m.classList.remove("primary"); w.classList.add("primary"); w.parentNode.insertBefore(w, m);
+  }
+  // The hero buttons download directly once a release exists; until then they scroll to #download.
+  fetch("https://api.github.com/repos/aks1n3d/beam-app/releases/latest")
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (rel) {
+      var ver = document.getElementById("ver");
+      if (!rel) {
+        document.querySelectorAll(".dlink").forEach(function (a) { a.setAttribute("aria-disabled", "true"); a.textContent = "Coming soon"; });
+        ver.textContent = "The first release is on its way.";
+        return;
+      }
+      var names = (rel.assets || []).map(function (a) { return a.name; });
+      document.querySelectorAll(".dlink").forEach(function (a) {
+        if (names.indexOf(a.dataset.file) < 0) { a.setAttribute("aria-disabled", "true"); a.textContent = "Coming soon"; }
+      });
+      var base = "https://github.com/aks1n3d/beam-app/releases/latest/download/";
+      document.querySelector('[data-os="mac"]').href = names.indexOf("beam-macos.dmg") >= 0 ? base + "beam-macos.dmg" : "#download";
+      document.querySelector('[data-os="win"]').href = names.indexOf("beam-windows-setup.exe") >= 0 ? base + "beam-windows-setup.exe" : "#download";
+      ver.insertAdjacentHTML("afterbegin", "Latest: <span class=\"mono\">" + String(rel.tag_name).replace(/[<>&"]/g, "") + "</span> · ");
+    })
+    .catch(function () {});
+})();
+</script>
+</body>
+</html>
