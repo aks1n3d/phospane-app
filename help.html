@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phospane: first launch help</title>
+<meta name="description" content="What to do when macOS or Windows warns you the first time you open Phospane.">
+<link rel="icon" href="favicon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+/* Same colours and type as index.html (the app's default theme), light and dark. */
+:root {
+  --bg:#111318; --card:#1a1d24; --card2:#22262f; --text:#eceef3; --muted:#9aa1ae;
+  --line:rgba(255,255,255,0.08); --accent:#8b8bff; --accentBtn:#5555ee; --accentFg:#fff;
+  --good:#34d399; --warn:#f5b84b;
+  --fBody:-apple-system, BlinkMacSystemFont, "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --fMono:ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  --r:14px; --rb:9px; --shadow:none;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:#f5f6fa; --card:#ffffff; --card2:#f0f2f7; --text:#15171c; --muted:#5d6471;
+    --line:rgba(20,24,40,0.1); --accent:#4b4be8; --good:#15803d; --warn:#9a6700;
+    --shadow:0 1px 2px rgba(16,24,40,0.05), 0 4px 16px rgba(16,24,40,0.05);
+    color-scheme: light;
+  }
+}
+* { box-sizing:border-box }
+html { scroll-behavior:smooth }
+body { margin:0; overflow-x:hidden; background:var(--bg); color:var(--text); font:16px/1.6 var(--fBody); -webkit-font-smoothing:antialiased }
+a { color:var(--accent); text-decoration:none }
+a:hover { text-decoration:underline }
+:focus-visible { outline:2px solid var(--accent); outline-offset:3px; border-radius:4px }
+.wrap { max-width:860px; margin:0 auto; padding:0 24px }
+.muted { color:var(--muted) }
+b { font-weight:650 }
+
+header { position:sticky; top:0; z-index:5; background:color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid var(--line) }
+header .wrap { display:flex; align-items:center; gap:24px; height:60px; max-width:1080px }
+.brand { display:flex; align-items:center; gap:10px; color:var(--text); font-weight:700; font-size:18px; letter-spacing:-0.01em }
+.brand:hover { text-decoration:none }
+.brand img { width:28px; height:28px; border-radius:7px }
+nav { margin-left:auto; display:flex; gap:22px; font-size:15px }
+nav a { color:var(--muted) }
+nav a:hover { color:var(--text); text-decoration:none }
+
+h1 { font-size:clamp(32px, 5vw, 46px); line-height:1.08; letter-spacing:-0.03em; margin:56px 0 12px; font-weight:750 }
+.lede { font-size:18px; color:var(--muted); margin:0 0 32px; max-width:38em }
+h2 { font-size:26px; letter-spacing:-0.02em; margin:56px 0 16px; display:flex; align-items:center; gap:10px }
+h2 svg { width:24px; height:24px }
+
+/* "What do you see?" index */
+.index { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:12px }
+.index a { display:block; background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:14px 16px; color:var(--text); box-shadow:var(--shadow) }
+.index a:hover { text-decoration:none; background:var(--card2) }
+.index a span { display:block; font-size:13px; color:var(--muted); margin-bottom:2px }
+.index a q { quotes:"“" "”" }
+
+/* one situation */
+.case { background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:24px; margin:0 0 16px; box-shadow:var(--shadow); scroll-margin-top:76px }
+.case h3 { margin:0 0 4px; font-size:19px; letter-spacing:-0.01em }
+.case .when { margin:0 0 16px; color:var(--muted); font-size:15px }
+.case .body { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:24px; align-items:start }
+.case .body.wide { grid-template-columns:minmax(0,1fr) }
+.case ol { margin:0; padding-left:22px }
+.case ol li { margin:0 0 10px }
+.case ol li::marker { color:var(--accent); font-family:var(--fMono); font-weight:600 }
+.case figure { margin:0; display:flex; flex-direction:column; gap:10px; align-items:center }
+.case figure img { display:block; max-width:100%; height:auto; border-radius:12px; border:1px solid var(--line) }
+.case figcaption { font-size:13px; color:var(--muted); text-align:center }
+.note { margin:14px 0 0; padding:12px 14px; border-radius:10px; background:var(--card2); color:var(--muted); font-size:14px }
+.note b { color:var(--text) }
+.tag { display:inline-block; font:600 12px/1 var(--fMono); padding:4px 7px; border-radius:6px; margin-right:6px; vertical-align:2px; background:color-mix(in srgb, var(--warn) 18%, transparent); color:var(--warn) }
+
+/* the Terminal command */
+.code { display:flex; align-items:flex-start; gap:10px; margin:10px 0 4px; padding:12px 12px 12px 14px; border-radius:10px; background:var(--card2); border:1px solid var(--line) }
+.code code { flex:1; min-width:0; font:14px/1.5 var(--fMono); white-space:pre-wrap; word-break:break-all }
+.copy { flex:none; padding:6px 12px; border-radius:7px; border:1px solid var(--line); background:var(--card); color:var(--text); font:600 13px var(--fBody); cursor:pointer }
+.copy:hover { background:var(--bg) }
+
+footer { border-top:1px solid var(--line); margin-top:72px; padding:28px 0 40px; color:var(--muted); font-size:14px }
+footer .wrap { display:flex; gap:20px; flex-wrap:wrap; align-items:center; max-width:1080px }
+footer .brand { font-size:15px }
+footer .brand img { width:20px; height:20px; border-radius:5px }
+
+@media (max-width: 700px) {
+  .index { grid-template-columns:minmax(0,1fr) }
+  .case .body { grid-template-columns:minmax(0,1fr) }
+  .case figure { order:-1 }
+}
+@media (max-width: 560px) {
+  .wrap { padding:0 16px }
+  .case { padding:18px }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="Phospane home"><img src="icon.png" alt="">Phospane</a>
+    <nav>
+      <a href="#mac">Mac</a>
+      <a href="#windows">Windows</a>
+      <a href="./#download">Download</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>First launch help</h1>
+  <p class="lede">Phospane is free and isn't sold through the App Store or signed with a paid certificate, so macOS and Windows warn you the first time you open it. That's expected. Find the message you see below; each one takes a minute, once.</p>
+
+  <div class="index" aria-label="What do you see?">
+    <a href="#mac-not-opened"><span>Mac</span><q>Phospane Not Opened</q> / <q>Apple could not verify…</q></a>
+    <a href="#mac-damaged"><span>Mac</span><q>Phospane is damaged and can't be opened</q></a>
+    <a href="#mac-screen"><span>Mac, when sharing</span>Asks for Screen &amp; System Audio Recording</a>
+    <a href="#mac-access"><span>Mac, when sharing</span>Keyboard or mouse don't work from the other computer</a>
+    <a href="#mac-network"><span>Mac</span><q>Phospane would like to find devices on your local network</q></a>
+    <a href="#mac-update"><span>Mac, after an update</span>Permissions asked again, or on but not working</a>
+    <a href="#win-smartscreen"><span>Windows</span><q>Windows protected your PC</q></a>
+    <a href="#win-uac"><span>Windows</span><q>Do you want to allow this app to make changes?</q></a>
+    <a href="#win-firewall"><span>Windows</span>Firewall asks to allow access</a>
+  </div>
+
+  <h2 id="mac"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.4 2-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.6s-2.5-1-2.5-3.7zM14.1 5.6c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2.1-.5 2.7-1.3z"/></svg>Mac</h2>
+
+  <section class="case" id="mac-not-opened">
+    <h3>“Phospane” Not Opened</h3>
+    <p class="when">“Apple could not verify ‘Phospane’ is free of malware…” the first time you open it.</p>
+    <div class="body">
+      <ol>
+        <li>Click <b>Done</b>. Not “Move to Trash”.</li>
+        <li>Open <b>System Settings › Privacy &amp; Security</b> and scroll down to <i>“Phospane” was blocked to protect your Mac</i>.</li>
+        <li>Click <b>Open Anyway</b>, then confirm with your password or Touch ID.</li>
+        <li>macOS asks one last time: click <b>Open Anyway</b> again. Phospane opens, and won't be blocked again.</li>
+      </ol>
+      <figure>
+        <img src="help/mac-not-opened.png" width="252" height="293" alt="macOS dialog: “Phospane” Not Opened. Apple could not verify “Phospane” is free of malware. Buttons: Move to Trash, Done.">
+        <img src="help/mac-open-anyway.png" width="320" height="70" alt="System Settings: “Phospane” was blocked to protect your Mac, with an Open Anyway button.">
+        <figcaption>Click Done, then Open Anyway in System Settings.</figcaption>
+      </figure>
+    </div>
+    <p class="note">Right-click › Open no longer gets past this on macOS 15 Sequoia and later; use System Settings as above.</p>
+  </section>
+
+  <section class="case" id="mac-damaged">
+    <h3>“Phospane” is damaged and can't be opened</h3>
+    <p class="when">“You should move it to the Trash.” Seen with older downloads and some Mac setups.</p>
+    <div class="body">
+      <ol>
+        <li>Click <b>Cancel</b>. Not “Move to Trash”. The app isn't broken; macOS says this about downloaded apps it can't check, and offers no Open Anyway button for it.</li>
+        <li>Make sure Phospane is in your <b>Applications</b> folder.</li>
+        <li>Open <b>Terminal</b> (Applications › Utilities), paste this line and press Return:
+          <div class="code"><code id="xattr">xattr -dr com.apple.quarantine /Applications/Phospane.app</code><button class="copy" type="button" data-copy="xattr">Copy</button></div>
+          <span class="muted" style="font-size:14px">It removes the “downloaded from the internet” mark from Phospane only.</span>
+        </li>
+        <li>Open Phospane again. It starts without a warning.</li>
+      </ol>
+      <figure>
+        <img src="help/mac-damaged.png" width="258" height="285" alt="macOS dialog: “Phospane” is damaged and can't be opened. You should move it to the Trash. Buttons: Move to Trash, Cancel.">
+        <figcaption>Click Cancel, then run the Terminal line.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="case" id="mac-screen">
+    <h3>Asks for Screen &amp; System Audio Recording</h3>
+    <p class="when">When you turn on <b>Share this computer</b>. Not needed if you only connect to other computers.</p>
+    <div class="body wide">
+      <ol>
+        <li>Click <b>Open System Settings</b> in the prompt, or go to <b>System Settings › Privacy &amp; Security › Screen &amp; System Audio Recording</b>.</li>
+        <li>Turn on <b>Phospane</b>, under both <i>Screen &amp; System Audio Recording</i> and <i>System Audio Recording Only</i> if you see both.</li>
+        <li>Quit Phospane (menu bar icon › Quit) and open it again.</li>
+      </ol>
+    </div>
+    <p class="note">Without the audio part, sound still works, just with a little more delay; Phospane shows a note and switches to the faster sound by itself once you allow it.</p>
+  </section>
+
+  <section class="case" id="mac-access">
+    <h3>Keyboard or mouse don't work from the other computer</h3>
+    <p class="when">You see this Mac's screen, but clicks and typing do nothing.</p>
+    <div class="body wide">
+      <ol>
+        <li>On this Mac, open <b>System Settings › Privacy &amp; Security › Accessibility</b>.</li>
+        <li>Turn on <b>Phospane</b>. If it isn't in the list, click <b>+</b> and choose Phospane in Applications.</li>
+        <li>Disconnect and connect again from the other computer.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="case" id="mac-network">
+    <h3>“Phospane” would like to find devices on your local network</h3>
+    <p class="when">macOS 15 and later, the first time Phospane looks for your other computers.</p>
+    <div class="body wide">
+      <ol>
+        <li>Click <b>Allow</b>. Phospane uses it to find your computers at home and to connect to them.</li>
+        <li>Clicked “Don't Allow” by mistake? Turn Phospane on in <b>System Settings › Privacy &amp; Security › Local Network</b>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="case" id="mac-update">
+    <h3>Permissions asked again after an update</h3>
+    <p class="when">Or Screen Recording / Accessibility shows Phospane turned on, but it doesn't work.</p>
+    <div class="body wide">
+      <ol>
+        <li>Open the same page in <b>System Settings › Privacy &amp; Security</b> (Screen &amp; System Audio Recording, or Accessibility).</li>
+        <li>Select Phospane and remove it with <b>−</b>, then add it again with <b>+</b> (or let Phospane ask again) and turn it on.</li>
+        <li>Quit Phospane and open it again.</li>
+      </ol>
+    </div>
+    <p class="note"><span class="tag">Why</span>Until Phospane is signed with an Apple Developer ID, macOS sees each update as a new app and forgets what you allowed. This goes away once it's signed.</p>
+  </section>
+
+  <h2 id="windows"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10.5 4.5v7H3zM12.5 4.2 21 3v8.5h-8.5zM3 12.5h7.5v7L3 18.5zM12.5 12.5H21V21l-8.5-1.2z"/></svg>Windows</h2>
+
+  <section class="case" id="win-smartscreen">
+    <h3>“Windows protected your PC”</h3>
+    <p class="when">Microsoft Defender SmartScreen, when you run the installer.</p>
+    <div class="body wide">
+      <ol>
+        <li>Click <b>More info</b> (the small link under the text).</li>
+        <li>Click <b>Run anyway</b>.</li>
+      </ol>
+    </div>
+    <p class="note">Your browser may also say the file “isn't commonly downloaded”: choose <b>Keep</b> (in Edge: <b>…</b> › Keep › Show more › Keep anyway).</p>
+  </section>
+
+  <section class="case" id="win-uac">
+    <h3>“Do you want to allow this app to make changes to your device?”</h3>
+    <p class="when">The admin prompt, once, during installation.</p>
+    <div class="body wide">
+      <ol>
+        <li>Click <b>Yes</b>. Phospane installs for all users and lets itself through Windows Firewall, on home and work networks and on Tailscale only, never on public Wi-Fi.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="case" id="win-firewall">
+    <h3>Windows Firewall asks to allow access</h3>
+    <p class="when">“Windows Defender Firewall has blocked some features of this app.” Normally the installer prevents this.</p>
+    <div class="body wide">
+      <ol>
+        <li>Tick <b>Private networks</b> (leave Public unticked) and click <b>Allow access</b>.</li>
+        <li>If other computers still can't find this PC, check that your Wi-Fi or Ethernet is set to <b>Private</b> in Settings › Network &amp; internet.</li>
+      </ol>
+    </div>
+  </section>
+
+  <p class="muted" style="margin-top:40px">Something else? Open an issue or see the release notes on <a href="https://github.com/aks1n3d/phospane-app/releases">GitHub</a>.</p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="./"><img src="icon.png" alt="">Phospane</a>
+    <span>Made by Aks1n3d</span>
+    <a href="./#download">Download</a>
+    <a href="https://github.com/aks1n3d/phospane-app/releases">Releases</a>
+  </div>
+</footer>
+
+<script>
+// Copy buttons; if the clipboard isn't available, select the text instead.
+document.querySelectorAll("[data-copy]").forEach(function (b) {
+  b.addEventListener("click", function () {
+    var el = document.getElementById(b.dataset.copy), text = el.textContent;
+    var done = function () { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy"; }, 1600); };
+    var select = function () { var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = "Press ⌘C"; };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, select);
+    else select();
+  });
+});
+</script>
+</body>
+</html>
